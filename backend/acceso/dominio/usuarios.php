@@ -129,7 +129,7 @@
         }
         public function setContrasena ($contrasena)
         {
-            $this -> contrasena = $contrasena;
+            $this -> contrasena = password_hash($contrasena, PASSWORD_DEFAULT);
         }
         public function setTelCel ($telCel)
         {

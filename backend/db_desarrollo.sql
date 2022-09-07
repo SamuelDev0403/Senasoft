@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 07-09-2022 a las 15:17:52
+-- Tiempo de generación: 07-09-2022 a las 22:33:32
 -- Versión del servidor: 10.4.24-MariaDB
 -- Versión de PHP: 8.1.6
 
@@ -34,10 +34,53 @@ INSERT INTO ciudadano (documento, nombre, apellidos, contrasena, telefonoCelular
 VALUES (_documento, _nombre, _apellidos, _contrasena, _telefonoCelular, _telefonoFijo, _correo, _direccion, _fechaNacimiento, _discapacidad, _accesoDis, _conecInt, _tipoReg, _municipio, _barrioVereda, _idTipoDocumento, _idSexo,  _idEtnia, _idEstrato, _idNivelEdu, _idDispositivo); 
 END$$
 
+DROP PROCEDURE IF EXISTS `spAddSondeo`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spAddSondeo` (IN `_titulo` VARCHAR(100), IN `_fechaApertura` DATETIME, IN `_fechaCierre` DATETIME, IN `_tematicaAbordada` VARCHAR(100), IN `_idSexo` INT(3), IN `_idEtnia` INT(3))   BEGIN
+
+INSERT INTO sondeo (titulo, fechaApertura, fechaCierre, tematicaAbordada, idSexo, idEtnia)
+VALUES (_titulo, _fechaApertura, _fechaCierre, _tematicaAbordada, _idSexo, _idEtnia);
+
+END$$
+
+DROP PROCEDURE IF EXISTS `spQueryEstrato`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spQueryEstrato` (IN `_idEstrato` INT(2))   BEGIN
+
+SELECT * FROM ciudadano WHERE idEstrato = _idEstrato;
+
+END$$
+
+DROP PROCEDURE IF EXISTS `spQueryEtnia`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spQueryEtnia` (IN `_idEtnia` INT(3))   BEGIN
+
+SELECT * FROM ciudadano WHERE idEtnia = _idEtnia;
+
+END$$
+
+DROP PROCEDURE IF EXISTS `spQueryEtniaSexo`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spQueryEtniaSexo` (IN `_idSexo` INT(3), IN `_idEtnia` INT(3))   BEGIN
+
+SELECT * FROM ciudadano WHERE idSexo = _idSexo AND idEtnia = _idEtnia;
+
+END$$
+
 DROP PROCEDURE IF EXISTS `spQueryLogin`$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `spQueryLogin` (IN `_documento` INT(15), IN `_contrasena` VARCHAR(150))   BEGIN
 
 SELECT * FROM ciudadano WHERE documento = _documento AND contrasena = _contrasena;
+
+END$$
+
+DROP PROCEDURE IF EXISTS `spQueryLogin2`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spQueryLogin2` (IN `_documento` INT(15))   BEGIN
+
+SELECT * FROM ciudadano WHERE documento = _documento;
+
+END$$
+
+DROP PROCEDURE IF EXISTS `spQuerySexo`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `spQuerySexo` (IN `_idSexo` INT(3))   BEGIN
+
+SELECT * FROM ciudadano WHERE idSexo = _idSexo;
 
 END$$
 
@@ -59,26 +102,6 @@ CREATE TABLE IF NOT EXISTS `administrador` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `barriovereda`
---
-
-DROP TABLE IF EXISTS `barriovereda`;
-CREATE TABLE IF NOT EXISTS `barriovereda` (
-  `idBarrioVereda` int(5) NOT NULL AUTO_INCREMENT,
-  `descripcion` varchar(100) NOT NULL,
-  PRIMARY KEY (`idBarrioVereda`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
-
---
--- Volcado de datos para la tabla `barriovereda`
---
-
-INSERT INTO `barriovereda` (`idBarrioVereda`, `descripcion`) VALUES
-(1, 'Perro con perro\r\n');
-
--- --------------------------------------------------------
-
---
 -- Estructura de tabla para la tabla `ciudadano`
 --
 
@@ -88,8 +111,8 @@ CREATE TABLE IF NOT EXISTS `ciudadano` (
   `nombre` varchar(50) NOT NULL,
   `apellidos` varchar(100) NOT NULL,
   `contrasena` varchar(150) NOT NULL,
-  `telefonoCelular` int(15) NOT NULL,
-  `telefonoFijo` int(10) NOT NULL,
+  `telefonoCelular` varchar(100) NOT NULL,
+  `telefonoFijo` varchar(100) NOT NULL,
   `correo` varchar(150) NOT NULL,
   `direccion` varchar(150) NOT NULL,
   `fechaNacimiento` date NOT NULL,
@@ -114,13 +137,6 @@ CREATE TABLE IF NOT EXISTS `ciudadano` (
   KEY `idTipoDocumento` (`idTipoDocumento`,`idSexo`,`idEtnia`,`idEstrato`,`idNivelEdu`,`idDispositivo`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Volcado de datos para la tabla `ciudadano`
---
-
-INSERT INTO `ciudadano` (`documento`, `nombre`, `apellidos`, `contrasena`, `telefonoCelular`, `telefonoFijo`, `correo`, `direccion`, `fechaNacimiento`, `discapacidad`, `accesoDis`, `conecInt`, `tipoReg`, `municipio`, `barrioVereda`, `idTipoDocumento`, `idSexo`, `idEtnia`, `idEstrato`, `idNivelEdu`, `idDispositivo`) VALUES
-(1025640977, 'Samuel', 'Yepes Osorio', '1234', 2147483647, 2094685, 'syepes@sisas.co', 'Cl 34 #4622', '2004-03-04', 'Soy Cojo', 1, 1, 1, '', '', 1, 1, 1, 1, 1, 1);
-
 -- --------------------------------------------------------
 
 --
@@ -132,14 +148,17 @@ CREATE TABLE IF NOT EXISTS `dispositivo` (
   `idDispositivo` int(2) NOT NULL AUTO_INCREMENT,
   `descripcion` varchar(25) NOT NULL,
   PRIMARY KEY (`idDispositivo`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `dispositivo`
 --
 
 INSERT INTO `dispositivo` (`idDispositivo`, `descripcion`) VALUES
-(1, 'Pc');
+(1, 'T. Movil'),
+(2, 'Computador'),
+(3, 'Tablet'),
+(4, 'Otro');
 
 -- --------------------------------------------------------
 
@@ -152,14 +171,19 @@ CREATE TABLE IF NOT EXISTS `estrato` (
   `idEstrato` int(2) NOT NULL AUTO_INCREMENT,
   `descripcion` int(1) NOT NULL,
   PRIMARY KEY (`idEstrato`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `estrato`
 --
 
 INSERT INTO `estrato` (`idEstrato`, `descripcion`) VALUES
-(1, 1);
+(1, 1),
+(2, 2),
+(3, 3),
+(4, 4),
+(5, 5),
+(6, 6);
 
 -- --------------------------------------------------------
 
@@ -172,34 +196,19 @@ CREATE TABLE IF NOT EXISTS `etnia` (
   `idEtnia` int(3) NOT NULL AUTO_INCREMENT,
   `descripcion` varchar(50) NOT NULL,
   PRIMARY KEY (`idEtnia`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `etnia`
 --
 
 INSERT INTO `etnia` (`idEtnia`, `descripcion`) VALUES
-(1, 'Blanco');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `municipio`
---
-
-DROP TABLE IF EXISTS `municipio`;
-CREATE TABLE IF NOT EXISTS `municipio` (
-  `idMunicipio` int(5) NOT NULL AUTO_INCREMENT,
-  `nombreMuni` varchar(100) NOT NULL,
-  PRIMARY KEY (`idMunicipio`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
-
---
--- Volcado de datos para la tabla `municipio`
---
-
-INSERT INTO `municipio` (`idMunicipio`, `nombreMuni`) VALUES
-(1, 'Itagui');
+(0, 'No aplica'),
+(1, 'Blanco'),
+(2, 'Mestizo'),
+(3, 'Negro'),
+(4, 'Indigena'),
+(5, 'Otro');
 
 -- --------------------------------------------------------
 
@@ -212,14 +221,18 @@ CREATE TABLE IF NOT EXISTS `niveleducacion` (
   `idNivelEdu` int(3) NOT NULL AUTO_INCREMENT,
   `descripcion` varchar(50) NOT NULL,
   PRIMARY KEY (`idNivelEdu`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `niveleducacion`
 --
 
 INSERT INTO `niveleducacion` (`idNivelEdu`, `descripcion`) VALUES
-(1, 'Tecnico');
+(1, 'Basica Primaria'),
+(2, 'Bachiller'),
+(3, 'Tecnico'),
+(4, 'Tecnologo'),
+(5, 'Profesional');
 
 -- --------------------------------------------------------
 
@@ -230,7 +243,24 @@ INSERT INTO `niveleducacion` (`idNivelEdu`, `descripcion`) VALUES
 DROP TABLE IF EXISTS `pregunta`;
 CREATE TABLE IF NOT EXISTS `pregunta` (
   `idPregunta` int(5) NOT NULL AUTO_INCREMENT,
+  `descripcion` varchar(200) NOT NULL,
   PRIMARY KEY (`idPregunta`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `preguntarespuesta`
+--
+
+DROP TABLE IF EXISTS `preguntarespuesta`;
+CREATE TABLE IF NOT EXISTS `preguntarespuesta` (
+  `idPreguntaRespuesta` int(5) NOT NULL AUTO_INCREMENT,
+  `idPregunta` int(5) NOT NULL,
+  `idRespuesta` int(5) NOT NULL,
+  PRIMARY KEY (`idPreguntaRespuesta`),
+  KEY `idPregunta` (`idPregunta`),
+  KEY `idRespuesta` (`idRespuesta`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -242,6 +272,7 @@ CREATE TABLE IF NOT EXISTS `pregunta` (
 DROP TABLE IF EXISTS `respuesta`;
 CREATE TABLE IF NOT EXISTS `respuesta` (
   `idRespuesta` int(5) NOT NULL AUTO_INCREMENT,
+  `descripcion` varchar(200) NOT NULL,
   PRIMARY KEY (`idRespuesta`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -256,14 +287,19 @@ CREATE TABLE IF NOT EXISTS `sexo` (
   `idSexo` int(3) NOT NULL AUTO_INCREMENT,
   `descripcion` varchar(50) NOT NULL,
   PRIMARY KEY (`idSexo`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `sexo`
 --
 
 INSERT INTO `sexo` (`idSexo`, `descripcion`) VALUES
-(1, 'Masculino');
+(0, 'No Aplica'),
+(1, 'Hombre'),
+(2, 'Mujer'),
+(3, 'Intersexual'),
+(4, 'Indefinido'),
+(5, 'Prefiere no decir');
 
 -- --------------------------------------------------------
 
@@ -274,7 +310,47 @@ INSERT INTO `sexo` (`idSexo`, `descripcion`) VALUES
 DROP TABLE IF EXISTS `sondeo`;
 CREATE TABLE IF NOT EXISTS `sondeo` (
   `idSondeo` int(5) NOT NULL AUTO_INCREMENT,
-  PRIMARY KEY (`idSondeo`)
+  `titulo` varchar(100) NOT NULL,
+  `fechaApertura` datetime NOT NULL,
+  `fechaCierre` datetime NOT NULL,
+  `tematicaAbordada` varchar(100) NOT NULL,
+  `idSexo` int(3) NOT NULL,
+  `idEtnia` int(3) NOT NULL,
+  PRIMARY KEY (`idSondeo`),
+  KEY `idSexo` (`idSexo`),
+  KEY `idEtnia` (`idEtnia`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `sondeociudadano`
+--
+
+DROP TABLE IF EXISTS `sondeociudadano`;
+CREATE TABLE IF NOT EXISTS `sondeociudadano` (
+  `idSondeoCiudadano` int(5) NOT NULL AUTO_INCREMENT,
+  `documento` int(15) NOT NULL,
+  `idSondeo` int(5) NOT NULL,
+  PRIMARY KEY (`idSondeoCiudadano`),
+  KEY `documento` (`documento`,`idSondeo`),
+  KEY `idSondeo` (`idSondeo`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `sondeopregunta`
+--
+
+DROP TABLE IF EXISTS `sondeopregunta`;
+CREATE TABLE IF NOT EXISTS `sondeopregunta` (
+  `idSondeoPregunta` int(5) NOT NULL AUTO_INCREMENT,
+  `idSondeo` int(5) NOT NULL,
+  `idPregunta` int(5) NOT NULL,
+  PRIMARY KEY (`idSondeoPregunta`),
+  KEY `idSondeo` (`idSondeo`),
+  KEY `idPregunta` (`idPregunta`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -288,14 +364,16 @@ CREATE TABLE IF NOT EXISTS `tipodocumento` (
   `idTipoDocumento` int(2) NOT NULL AUTO_INCREMENT,
   `descripcion` varchar(50) NOT NULL,
   PRIMARY KEY (`idTipoDocumento`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `tipodocumento`
 --
 
 INSERT INTO `tipodocumento` (`idTipoDocumento`, `descripcion`) VALUES
-(1, 'Cedula de Ciudadania');
+(1, 'Cedula de Ciudadania'),
+(2, 'Tarjeta de Identidad'),
+(3, 'Cedula de extranjeria');
 
 --
 -- Restricciones para tablas volcadas
@@ -311,6 +389,34 @@ ALTER TABLE `ciudadano`
   ADD CONSTRAINT `ciudadano_ibfk_6` FOREIGN KEY (`idEstrato`) REFERENCES `estrato` (`idEstrato`),
   ADD CONSTRAINT `ciudadano_ibfk_7` FOREIGN KEY (`idNivelEdu`) REFERENCES `niveleducacion` (`idNivelEdu`),
   ADD CONSTRAINT `ciudadano_ibfk_8` FOREIGN KEY (`idDispositivo`) REFERENCES `dispositivo` (`idDispositivo`);
+
+--
+-- Filtros para la tabla `preguntarespuesta`
+--
+ALTER TABLE `preguntarespuesta`
+  ADD CONSTRAINT `preguntarespuesta_ibfk_1` FOREIGN KEY (`idPregunta`) REFERENCES `pregunta` (`idPregunta`),
+  ADD CONSTRAINT `preguntarespuesta_ibfk_2` FOREIGN KEY (`idRespuesta`) REFERENCES `respuesta` (`idRespuesta`);
+
+--
+-- Filtros para la tabla `sondeo`
+--
+ALTER TABLE `sondeo`
+  ADD CONSTRAINT `sondeo_ibfk_1` FOREIGN KEY (`idSexo`) REFERENCES `sexo` (`idSexo`),
+  ADD CONSTRAINT `sondeo_ibfk_2` FOREIGN KEY (`idEtnia`) REFERENCES `etnia` (`idEtnia`);
+
+--
+-- Filtros para la tabla `sondeociudadano`
+--
+ALTER TABLE `sondeociudadano`
+  ADD CONSTRAINT `sondeociudadano_ibfk_1` FOREIGN KEY (`documento`) REFERENCES `ciudadano` (`documento`),
+  ADD CONSTRAINT `sondeociudadano_ibfk_2` FOREIGN KEY (`idSondeo`) REFERENCES `sondeo` (`idSondeo`);
+
+--
+-- Filtros para la tabla `sondeopregunta`
+--
+ALTER TABLE `sondeopregunta`
+  ADD CONSTRAINT `sondeopregunta_ibfk_1` FOREIGN KEY (`idSondeo`) REFERENCES `sondeo` (`idSondeo`),
+  ADD CONSTRAINT `sondeopregunta_ibfk_2` FOREIGN KEY (`idPregunta`) REFERENCES `pregunta` (`idPregunta`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
