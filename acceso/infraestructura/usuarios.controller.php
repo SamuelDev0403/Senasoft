@@ -36,6 +36,7 @@
                                 $objDao = new UsuariosDao($objDto);
                                 $objService = new UsuarioServices($objDao);
                                 $resultado = $objService -> login($info[documento], $info[contrasena]);
+                                // $resultado = $objService -> login("1025640977", "1234");
                 
                 
                                 if ($resultado->fetch() === false){
@@ -85,6 +86,12 @@
                                 $objService = new UsuarioServices($objDao);
     
                                 $objService -> add();
+
+                                if ($objService -> add()) {
+                                    echo json_encode(array("status"=> '200', "result"=>"Success"), http_response_code(200));
+                                } else {
+                                    echo json_encode(array("status"=> '404', "result"=>"Not found"), http_response_code(404));
+                                }
     
                             } catch (Exception $e) {
                                 echo "Error en el controlador " . $e -> getMessage();

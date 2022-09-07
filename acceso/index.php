@@ -10,6 +10,9 @@
     require_once 'infraestructura/usuarios.controller.php';
     require_once 'infraestructura/route.controller.php';
 
+    require_once '../php-jwt-main/src/JWT.php';
+    require_once '../php-jwt-main/src/Key.php';
+
     $objArranque = new RouteControllerUsuario();
     $objArranque -> run();
 

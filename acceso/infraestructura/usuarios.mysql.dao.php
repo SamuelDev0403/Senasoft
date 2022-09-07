@@ -1,5 +1,8 @@
 <?php
 
+    use Firebase\JWT\JWT;
+    use Firebase\JWT\Key;
+
     class UsuariosDao implements UsuariosInterface {
         private $documento;
         private $nombre;
@@ -59,6 +62,22 @@
                 $stmt -> bindParam(1, $documento, PDO::PARAM_INT);
                 $stmt -> bindParam(2, $contrasena, PDO::PARAM_STR);
                 $stmt -> execute();
+                
+                $time = time();
+                $time = (60 * 30);
+                $key = "*adljkfdjdñasloaspsas*/$";
+                $payload = array(
+                    "iat" => $time,
+                    "data" => array(
+                        "documento" => $documento
+                    )
+                );
+
+                $jwt = JWT::encode($payload, $key, 'HS256');
+                setcookie('cookiesenasoft', $jwt);
+
+                // var_dump($jwt);
+                
                 $estado = $stmt;
             } catch (PDOException $e) {
                 echo "Error en el dao";
@@ -74,32 +93,32 @@
             try {
                 $con = new ConexionUsuarios();
                 $stmt = $con -> getConexion() -> prepare($sql);
-                $stmt -> bidnParam(1, $this -> documento, PDO::PARAM_INT);
-                $stmt -> bidnParam(2, $this -> nombre, PDO::PARAM_STR);
-                $stmt -> bidnParam(3, $this -> apellidos, PDO::PARAM_STR);
-                $stmt -> bidnParam(4, $this -> contrasena, PDO::PARAM_STR);
-                $stmt -> bidnParam(5, $this -> telCel, PDO::PARAM_INT);
-                $stmt -> bidnParam(6, $this -> telFijo, PDO::PARAM_INT);
-                $stmt -> bidnParam(7, $this -> correo, PDO::PARAM_STR);
-                $stmt -> bidnParam(8, $this -> direccion, PDO::PARAM_STR);
-                $stmt -> bidnParam(9, $this -> fechaNa, PDO::PARAM_STR);
-                $stmt -> bidnParam(10, $this -> discapacidad, PDO::PARAM_STR);
-                $stmt -> bidnParam(11, $this -> accesoDis, PDO::PARAM_BOOL);
-                $stmt -> bidnParam(12, $this -> conecInt, PDO::PARAM_BOOL);
-                $stmt -> bidnParam(13, $this -> tipoReg, PDO::PARAM_BOOL);
-                $stmt -> bidnParam(14, $this -> municipio, PDO::PARAM_STR);
-                $stmt -> bidnParam(15, $this -> barrioVereda, PDO::PARAM_STR);
-                $stmt -> bidnParam(16, $this -> idTipoDoc, PDO::PARAM_INT);
-                $stmt -> bidnParam(17, $this -> idSexo, PDO::PARAM_INT);
-                $stmt -> bidnParam(18, $this -> idEtnia, PDO::PARAM_INT);
-                $stmt -> bidnParam(19, $this -> idEstrato, PDO::PARAM_INT);
-                $stmt -> bidnParam(20, $this -> idNivelEdu, PDO::PARAM_INT);
-                $stmt -> bidnParam(21, $this -> idDispo, PDO::PARAM_INT);
+                $stmt -> bindParam(1, $this -> documento, PDO::PARAM_INT);
+                $stmt -> bindParam(2, $this -> nombre, PDO::PARAM_STR);
+                $stmt -> bindParam(3, $this -> apellidos, PDO::PARAM_STR);
+                $stmt -> bindParam(4, $this -> contrasena, PDO::PARAM_STR);
+                $stmt -> bindParam(5, $this -> telCel, PDO::PARAM_INT);
+                $stmt -> bindParam(6, $this -> telFijo, PDO::PARAM_INT);
+                $stmt -> bindParam(7, $this -> correo, PDO::PARAM_STR);
+                $stmt -> bindParam(8, $this -> direccion, PDO::PARAM_STR);
+                $stmt -> bindParam(9, $this -> fechaNa, PDO::PARAM_STR);
+                $stmt -> bindParam(10, $this -> discapacidad, PDO::PARAM_STR);
+                $stmt -> bindParam(11, $this -> accesoDis, PDO::PARAM_BOOL);
+                $stmt -> bindParam(12, $this -> conecInt, PDO::PARAM_BOOL);
+                $stmt -> bindParam(13, $this -> tipoReg, PDO::PARAM_BOOL);
+                $stmt -> bindParam(14, $this -> municipio, PDO::PARAM_STR);
+                $stmt -> bindParam(15, $this -> barrioVereda, PDO::PARAM_STR);
+                $stmt -> bindParam(16, $this -> idTipoDoc, PDO::PARAM_INT);
+                $stmt -> bindParam(17, $this -> idSexo, PDO::PARAM_INT);
+                $stmt -> bindParam(18, $this -> idEtnia, PDO::PARAM_INT);
+                $stmt -> bindParam(19, $this -> idEstrato, PDO::PARAM_INT);
+                $stmt -> bindParam(20, $this -> idNivelEdu, PDO::PARAM_INT);
+                $stmt -> bindParam(21, $this -> idDispo, PDO::PARAM_INT);
                 $stmt -> execute();
                 $estado = $stmt;
 
             } catch (PDOException $e) {
-                echo "Error en el dao";
+                echo "Error en el dao " . $e -> getMessage();;
             }
             return $estado;
         }
