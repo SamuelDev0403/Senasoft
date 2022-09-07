@@ -17,6 +17,21 @@
         {
             return $this -> usuarioRepository -> addUsuario();
         }
+
+        public function querySexo ($idSexo)
+        {
+            return $this -> usuarioRepository :: getQuerySexo($idSexo);
+        }
+
+        public function queryEtnia ($idEtnia)
+        {
+            return $this -> usuarioRepository :: getQueryEtnia($idEtnia);
+        }
+
+        public function queryEstrato ($idEstrato)
+        {
+            return $this -> usuarioRepository :: getQueryEstrato($idEstrato);
+        }
     }
 
 ?>

@@ -104,8 +104,61 @@
             return $estado;
         }
 
-    }
+        public static function getQuerySexo($idSexo)
+        {
+            $estado = false;
+            $sql = "CALL spQuerySexo(?)";
 
+            try {
+                $con = new ConexionUsuarios();
+                $stmt = $con -> getConexion() -> prepare($sql);
+                $stmt -> bindParam(1, $idSexo, PDO::PARAM_INT);
+                $stmt -> execute();
+                $estado = $stmt;
+
+            } catch (PDOException $e) {
+                echo "Error en el dao";
+            }
+            return $estado;
+        }
+
+        public static function getQueryEtnia($idEtnia)
+        {
+            $estado = false;
+            $sql = "CALL spQueryEtnia(?)";
+
+            try {
+                $con = new ConexionUsuarios();
+                $stmt = $con -> getConexion() -> prepare($sql);
+                $stmt -> bindParam(1, $idEtnia, PDO::PARAM_INT);
+                $stmt -> execute();
+                $estado = $stmt;
+
+            } catch (PDOException $e) {
+                echo "Error en el dao";
+            }
+            return $estado;
+        }
+
+        public static function getQueryEstrato ($idEstrato)
+        {
+            $estado = false;
+            $sql = "CALL spQueryEstrato(?)";
+
+            try {
+                $con = new ConexionUsuarios();
+                $stmt = $con -> getConexion() -> prepare($sql);
+                $stmt -> bindParam(1, $idEstrato, PDO::PARAM_INT);
+                $stmt -> execute();
+                $estado = $stmt;
+
+            } catch (PDOException $e) {
+                echo "Error en el dao";
+            }
+            return $estado;
+        }
+
+    }
 
 
 ?>
