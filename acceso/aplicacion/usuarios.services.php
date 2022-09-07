@@ -8,9 +8,9 @@
             $this -> usuarioRepository = $usuarioRepository;
         }
 
-        public function login ($documento, $contrasena)
+        public function login ($documento)
         {
-            return $this -> usuarioRepository :: login($documento, $contrasena);
+            return $this -> usuarioRepository :: login($documento);
         }
 
         public function add ()

@@ -35,14 +35,43 @@
                                 $objDto = new Usuarios();
                                 $objDao = new UsuariosDao($objDto);
                                 $objService = new UsuarioServices($objDao);
-                                $resultado = $objService -> login($info[documento], $info[contrasena]);
-                                // $resultado = $objService -> login("1025640977", "1234");
+
+
+
+                                // $varPass = password_verify($info['contrasena'], );
+
+                                // $resultado = $objService -> login($info['documento'], $info['contrasena']);
+                                // // $resultado = $objService -> login("1025640977", "1234");
                 
                 
-                                if ($resultado->fetch() === false){
-                                    echo json_encode(array("status"=> '404', "result"=>"Not found"), http_response_code(404));
-                                }else {
+                                // if ($resultado -> fetch() === false){
+                                //     echo json_encode(array("status"=> '404', "result"=>"Not found"), http_response_code(404));
+                                // }else {
+                                //     echo json_encode(array("status"=> '200', "result"=>"Success"), http_response_code(200));
+                                // }
+
+
+                                $resultado = $objService->login($info['documento']);
+                                $resultado = $resultado->fetch();
+
+                                // echo $resultado['contrasena'];
+
+                                if (password_verify($info['contrasena'], $resultado['contrasena'])){
+                                    $time = time();
+                                    $time = (60 * 30);
+                                    $key = "*adljkfdjdñasloaspsas*/$";
+                                    $payload = array(
+                                        "iat" => $time,
+                                        "data" => array(
+                                            "documento" => $documento
+                                        )
+                                    );
+
+                                    $jwt = JWT::encode($payload, $key, 'HS256');
+                                    setcookie('cookiesenasoft', $jwt);
                                     echo json_encode(array("status"=> '200', "result"=>"Success"), http_response_code(200));
+                                } else {
+                                    echo json_encode(array("status"=> '404', "result"=>"Not found"), http_response_code(404));
                                 }
                             } catch (Exception $e) {
                                 echo "Error en el controlador " . $e -> getMessage();
@@ -60,7 +89,7 @@
                                 //  echo($info['documento']);
     
                                 $objDto = new Usuarios();
-                                $objDto -> setDocumento($info['dniInput']);
+                                $objDto -> setDocumento($info['documento']);
                                 $objDto -> setNombre($info['nameInput']);
                                 $objDto -> setApellidos($info['lastNameInput']);
                                 $objDto -> setContrasena($info['passwordInput']);
@@ -85,7 +114,7 @@
                                 $objDao = new UsuariosDao($objDto);
                                 $objService = new UsuarioServices($objDao);
     
-                                $objService -> add();
+                                // $objService -> add();
 
                                 if ($objService -> add()) {
                                     echo json_encode(array("status"=> '200', "result"=>"Success"), http_response_code(200));

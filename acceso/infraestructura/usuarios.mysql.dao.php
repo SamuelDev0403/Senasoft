@@ -51,33 +51,17 @@
             $this -> idDispo = $objDtoUsuarios -> getIdDispositivo(); 
         }
 
-        public static function login($documento, $contrasena)
+        public static function login($documento)
         {
             $estado = false;
-            $sql = "CALL spQueryLogin(?,?)";
+            $sql = "CALL spQueryLogin2(?)";
 
             try {
                 $con = new ConexionUsuarios();
                 $stmt = $con -> getConexion() -> prepare($sql);
                 $stmt -> bindParam(1, $documento, PDO::PARAM_INT);
-                $stmt -> bindParam(2, $contrasena, PDO::PARAM_STR);
+                // $stmt -> bindParam(2, $contrasena, PDO::PARAM_STR);
                 $stmt -> execute();
-                
-                $time = time();
-                $time = (60 * 30);
-                $key = "*adljkfdjdñasloaspsas*/$";
-                $payload = array(
-                    "iat" => $time,
-                    "data" => array(
-                        "documento" => $documento
-                    )
-                );
-
-                $jwt = JWT::encode($payload, $key, 'HS256');
-                setcookie('cookiesenasoft', $jwt);
-
-                // var_dump($jwt);
-                
                 $estado = $stmt;
             } catch (PDOException $e) {
                 echo "Error en el dao";
@@ -117,7 +101,7 @@
                 $stmt -> execute();
                 $estado = $stmt;
 
-            } catch (PDOException $e) {
+            } catch (Exception $e) {
                 echo "Error en el dao " . $e -> getMessage();;
             }
             return $estado;
