@@ -10,6 +10,8 @@
         private $idEtnia;
         private $idPregunta;
         private $descripcionPregunta;
+        private $idRespuesta;
+        private $descripcionRespuesta;
 
         /***************/
         /*** GETTERS ***/
@@ -51,6 +53,14 @@
         {
             return $this -> descripcionPregunta;
         }
+        public function getIdRespuesta ()
+        {
+            return $this -> idRespuesta;
+        }
+        public function getDescripRespuesta ()
+        {
+            return $this -> descripcionRespuesta;
+        }
         
         /***************/
         /*** SETTERS ***/
@@ -91,6 +101,14 @@
         public function setDescipPregunta ($descripcionPregunta)
         {
             $this -> descripcionPregunta = $descripcionPregunta;
+        }
+        public function setIdRespuesta ($idRespuesta)
+        {
+            $this -> idRespuesta = $idRespuesta;
+        }
+        public function setDescripRespuesta ($descripcionRespuesta)
+        {
+            $this -> descripcionRespuesta = $descripcionRespuesta;
         }
     }
 

@@ -64,7 +64,7 @@
             return $estado;
         }
 
-        public function addPregunta ()
+        public static function addPregunta ($descripcionPregunta)
         {
             $estado = false;
             $sql = "CALL spAddPregunta(?)";
@@ -72,7 +72,7 @@
             try {
                 $con = new ConexionSondeo();
                 $stmt = $con -> getConexion() -> prepare($sql);
-                $stmt -> bindParam(1, $this -> descripcionPregunta, PDO::PARAM_STR);
+                $stmt -> bindParam(1, $descripcionPregunta, PDO::PARAM_STR);
                 $stmt -> execute();
                 $estado = true;
 
@@ -81,6 +81,25 @@
             }
             return $estado;
         }
+
+        public static function addRespuesta ($descripcionRespuesta)
+        {
+            $estado = false;
+            $sql = "CALL spAddRespuesta(?)";
+
+            try {
+                $con = new ConexionSondeo();
+                $stmt = $con -> getConexion() -> prepare($sql);
+                $stmt -> bindParam(1, $descripcionRespuesta, PDO::PARAM_STR);
+                $stmt -> execute();
+                $estado = true;
+
+            } catch (Exception $e) {
+                echo "Error en el dao";
+            }
+            return $estado;
+        }
+
     }
 
 ?>

@@ -17,6 +17,16 @@
         {
             return $this -> sondeoRepository :: viewAllSondeo();
         }
+
+        public function addPregunta ($descripcionPregunta)
+        {
+            return $this -> sondeoRepository :: addPregunta($descripcionPregunta);
+        }
+
+        public function addRespuesta ($descripcionRespuesta)
+        {
+            return $this -> sondeoRepository :: addRespuesta($descripcionRespuesta);
+        }
     }
 
 ?>
