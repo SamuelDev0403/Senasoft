@@ -9,7 +9,7 @@
     $route = array_filter($route);
 
     $json = array(
-        'status' => 400,
+        'status' => 404,
         'result' => 'Not Found'
     );
 
@@ -17,17 +17,16 @@
         echo json_encode($json, http_response_code($json['status']));
     }
 
-    // $route = explode('?', $route[1])[0];
-    
     switch ($route[2]) {
         case 'acceso':
-            $obj = new ApiUsuariosController();
-            $obj -> api();
+            require_once 'acceso/index.php';
             break;
-        
+
+        case 'sondeo':
+            require_once 'sondeo/index.php';
+            break;
+
         default:
-            echo json_encode($json, http_response_code($json['status']));  
+            echo json_encode($json, http_response_code($json['status']));
             break;
     }
-
-?>

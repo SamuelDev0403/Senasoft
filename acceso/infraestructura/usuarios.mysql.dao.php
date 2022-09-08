@@ -1,8 +1,4 @@
 <?php
-
-    use Firebase\JWT\JWT;
-    use Firebase\JWT\Key;
-
     class UsuariosDao implements UsuariosInterface {
         private $documento;
         private $nombre;
@@ -64,7 +60,7 @@
                 $stmt -> execute();
                 $estado = $stmt;
             } catch (PDOException $e) {
-                echo "Error en el dao";
+                // echo "Error en el dao";
             }
             return $estado;
         }
@@ -120,7 +116,7 @@
                 $estado = $stmt;
 
             } catch (PDOException $e) {
-                echo "Error en el dao";
+                // echo "Error en el dao";
             }
             return $estado;
         }
@@ -138,7 +134,7 @@
                 $estado = $stmt;
 
             } catch (PDOException $e) {
-                echo "Error en el dao";
+                // echo "Error en el dao";
             }
             return $estado;
         }
@@ -156,7 +152,7 @@
                 $estado = $stmt;
 
             } catch (PDOException $e) {
-                echo "Error en el dao";
+                // echo "Error en el dao";
             }
             return $estado;
         }
