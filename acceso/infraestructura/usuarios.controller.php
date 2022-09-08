@@ -5,6 +5,9 @@
     // require_once 'conexion.usuarios.php';
     // require_once 'usuarios.mysql.dao.php';
 
+    use Firebase\JWT\JWT;
+    use Firebase\JWT\Key;
+
     class ApiUsuariosController {
 
         public function api ()
@@ -63,7 +66,7 @@
                                     $payload = array(
                                         "iat" => $time,
                                         "data" => array(
-                                            "documento" => $documento
+                                            "documento" => $info['documento']
                                         )
                                     );
 
