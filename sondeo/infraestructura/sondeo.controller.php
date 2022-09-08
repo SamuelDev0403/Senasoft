@@ -8,6 +8,8 @@
                     $var = file_get_contents("php://input");
                     $info = json_decode($var, true);
 
+                    // var_dump($info);
+
                     $objDto = new Sondeo();
                     $objDto -> setTitulo($info['titulo']);
                     $objDto -> setFechaApertura($info['fechaApertura']);
@@ -15,27 +17,29 @@
                     $objDto -> setTematicaAbordada($info['tematicaAbordada']);
                     $objDto -> setIdSexo($info['idSexo']);
                     $objDto -> setIdEtnia($info['idEtnia']);
+                    $objDto -> setDescripPregunta($info['idEtnia']);
+
 
                     $objDao = new SondeoDao($objDto);
                     $objService = new SondeoService($objDao);
-
                     $objService -> add();
 
-                    if (!$objService -> add()) {
-                        echo json_encode(array('status' => 404, 'result' => 'Not Found'), http_response_code(404));
-                    } else {
-                        echo json_encode(array('status' => 404, 'result' => 'Successfully'), http_response_code(200));
+
+                    foreach ($info['questions'] as $key => $value) {
+                        $objService -> addPregunta($value["pregunta"]);
+                        foreach ($value["respuestas"] as $key => $value2) {
+                            $objService -> addRespuesta($value2);
+                        }
                     }
+                    
 
-                    break;
+                    $resultado = true;
 
-                case 'GET':
-                    $objService = new SondeoService( new SondeoDao( new Sondeo()));
-
-                    $var = $objService -> viewAll() -> fetch();
-                    $response = json_encode($var);
-
-                    var_dump($response);
+                    if ($resultado) {
+                        echo json_encode(array('status' => 200, 'result' => 'Success'), http_response_code(200));
+                    } else {
+                        echo json_encode(array('status' => 404, 'result' => 'Not found'), http_response_code(404));
+                    }
 
                     break;
                 

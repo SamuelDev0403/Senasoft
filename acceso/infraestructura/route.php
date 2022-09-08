@@ -1,5 +1,10 @@
 <?php
 
+    header('Access-Control-Allow-Origin: *');
+    header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization');
+    header("Access-Control-Allow-Credentials: true");
+    header('Content-Type: application/json');
+
     $route = explode('/', $_SERVER['REQUEST_URI']);
     $route = array_filter($route);
 
@@ -14,7 +19,7 @@
 
     // $route = explode('?', $route[1])[0];
     
-    switch ($route[3]) {
+    switch ($route[2]) {
         case 'acceso':
             $obj = new ApiUsuariosController();
             $obj -> api();

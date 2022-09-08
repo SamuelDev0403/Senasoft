@@ -98,7 +98,7 @@
         {
             $this -> idPregunta = $idPregunta;
         }
-        public function setDescipPregunta ($descripcionPregunta)
+        public function setDescripPregunta ($descripcionPregunta)
         {
             $this -> descripcionPregunta = $descripcionPregunta;
         }

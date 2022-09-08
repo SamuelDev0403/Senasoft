@@ -23,8 +23,6 @@
             $cadena = $this -> drive . ":host=" . $this -> host . ";dbname=" . $this -> db;
             try {
                 $con = new PDO($cadena, $this -> user, $this -> pass);
-
-                echo "Conexion exitosa";
             } catch (PDOException $e) {
                 echo "Error en la conexion a la base de datos";
             }
