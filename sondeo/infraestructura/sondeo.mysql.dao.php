@@ -10,6 +10,8 @@
         private $idEtnia;
         private $idPregunta;
         private $descripcionPregunta;
+        private $idRespuesta;
+        private $descripcionRespuesta;
 
         public function __construct ($objDto)
         {
@@ -22,6 +24,8 @@
             $this -> idEtnia = $objDto -> getIdEtnia();
             $this -> idPregunta = $objDto -> getIdPregunta();
             $this -> descripcionPregunta = $objDto -> getDescripPregunta();
+            $this -> idRespuesta = $objDto -> getIdRespuesta();
+            $this -> descripcionRespuesta = $objDto -> getDescripRespuesta();
         }
 
         public function addSondeo ()
