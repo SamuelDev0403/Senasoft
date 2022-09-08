@@ -16,6 +16,7 @@
         private $tipoReg;
         private $municipio;
         private $barrioVereda;
+        private $idRol;
         private $idTipoDoc;
         private $idSexo;
         private $idEtnia;
@@ -85,6 +86,10 @@
         public function getBarrioVereda ()
         {
             return $this -> barrioVereda;
+        }
+        public function getIdRol ()
+        {
+            return $this -> idRol;
         }
         public function getIdTipoDoc ()
         {
@@ -174,6 +179,10 @@
         public function setBarrioVereda ($barrioVereda)
         {
             $this -> barrioVereda = $barrioVereda;
+        }
+        public function setIdRol ($idRol)
+        {
+            $this -> idRol = $idRol;
         }
         public function setIdTipoDoc ($idTipoDoc)
         {
