@@ -43,6 +43,16 @@
 
                     break;
                 
+                    case 'GET':
+                        $objService = new SondeoService( new SondeoDao( new Sondeo()));
+    
+                        $var = $objService -> viewAll() -> fetch();
+                        $response = json_encode($var);
+    
+                        echo json_encode($response);
+    
+                        break;
+                
             }
         }
     }

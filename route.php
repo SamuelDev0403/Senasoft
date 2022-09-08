@@ -1,13 +1,10 @@
 <?php
 
-<<<<<<< HEAD
-=======
     header('Access-Control-Allow-Origin: *');
     header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization');
     header("Access-Control-Allow-Credentials: true");
     header('Content-Type: application/json');
 
->>>>>>> backend
     $route = explode('/', $_SERVER['REQUEST_URI']);
     $route = array_filter($route);
 
@@ -20,11 +17,7 @@
         echo json_encode($json, http_response_code($json['status']));
     }
 
-<<<<<<< HEAD
     switch ($route[3]) {
-=======
-    switch ($route[2]) {
->>>>>>> backend
         case 'acceso':
             require_once 'acceso/index.php';
             break;
@@ -37,8 +30,5 @@
             echo json_encode($json, http_response_code($json['status']));
             break;
     }
-<<<<<<< HEAD
 
 ?>
-=======
->>>>>>> backend

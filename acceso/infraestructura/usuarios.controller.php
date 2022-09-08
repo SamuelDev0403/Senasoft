@@ -5,15 +5,8 @@
 // require_once 'conexion.usuarios.php';
 // require_once 'usuarios.mysql.dao.php';
 
-<<<<<<< HEAD
-    use Firebase\JWT\JWT;
-    use Firebase\JWT\Key;
-
-    class ApiUsuariosController {
-=======
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
->>>>>>> backend
 
 class ApiUsuariosController
 {
@@ -58,12 +51,8 @@ class ApiUsuariosController
                                         "iat" => $time,
                                         "data" => array(
                                             "documento" => $info['documento']
-<<<<<<< HEAD
-                                        )
-=======
                                         ),
                                         "rol" => $resultado['idRol']
->>>>>>> backend
                                     );
 
                                     $jwt = JWT::encode($payload, $key, 'HS256');
@@ -79,47 +68,7 @@ class ApiUsuariosController
                             echo "Error en el controlador " . $e->getMessage();
                         }
 
-<<<<<<< HEAD
-                        case 'registro':
-                            
-                            try {
-                                $var = file_get_contents("php://input");
-    
-                                $info = json_decode($var, true);
-    
-                                //  echo($info['documento']);
-    
-                                $objDto = new Usuarios();
-                                $objDto -> setDocumento($info['documento']);
-                                $objDto -> setNombre($info['nameInput']);
-                                $objDto -> setApellidos($info['lastNameInput']);
-                                $objDto -> setContrasena($info['passwordInput']);
-                                $objDto -> setTelCel($info['celInput']);
-                                $objDto -> setTelFijo($info['telInput']);
-                                $objDto -> setCorreo($info['emailInput']);
-                                $objDto -> setDireccion($info['addressInput']);
-                                $objDto -> setFechaNa($info['birthdateInput']);
-                                $objDto -> setDiscapacidad($info['disabilityInput']);
-                                $objDto -> setAccesoDis($info['accessInput']);
-                                $objDto -> setConecInt($info['connectivityInput']);
-                                $objDto -> setTipoReg($info['regimeInput']);
-                                $objDto -> setMunicipio($info['municipalityInput']);
-                                $objDto -> setBarrioVereda($info['neighborhoodInput']);
-                                $objDto -> setIdRol($info['idRol']);
-                                $objDto -> setIdTipoDoc($info['dniType']);
-                                $objDto -> setIdSexo($info['sexInput']);
-                                $objDto -> setIdEtnia($info['ethnicityInput']);
-                                $objDto -> setIdEstrato($info['stratumInput']);
-                                $objDto -> setIdNivelEdu($info['levelInput']);
-                                $objDto -> setIdDispositivo($info['devicesInput']);
-    
-                                $objDao = new UsuariosDao($objDto);
-                                $objService = new UsuarioServices($objDao);
-    
-                                // $objService -> add();
-=======
                         break;
->>>>>>> backend
 
                     case 'registro':
 
