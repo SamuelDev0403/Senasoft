@@ -20,6 +20,8 @@
             $this -> tematicaAbordada = $objDto -> getTematicaAbordada();
             $this -> idSexo = $objDto -> getIdSexo();
             $this -> idEtnia = $objDto -> getIdEtnia();
+            $this -> idPregunta = $objDto -> getIdPregunta();
+            $this -> descripcionPregunta = $objDto -> getDescripPregunta();
         }
 
         public function addSondeo ()
