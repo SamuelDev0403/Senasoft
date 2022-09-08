@@ -12,6 +12,11 @@
         {
             return $this -> sondeoRepository -> addSondeo();
         }
+        
+        public function viewAll ()
+        {
+            return $this -> sondeoRepository :: viewAllSondeo();
+        }
     }
 
 ?>

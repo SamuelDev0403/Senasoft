@@ -28,6 +28,16 @@
                     }
 
                     break;
+
+                case 'GET':
+                    $objService = new SondeoService( new SondeoDao( new Sondeo()));
+
+                    $var = $objService -> viewAll() -> fetch();
+                    $response = json_encode($var);
+
+                    var_dump($response);
+
+                    break;
                 
             }
         }

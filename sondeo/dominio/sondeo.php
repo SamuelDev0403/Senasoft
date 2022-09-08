@@ -8,6 +8,8 @@
         private $tematicaAbordada;
         private $idSexo;
         private $idEtnia;
+        private $idPregunta;
+        private $descripcionPregunta;
 
         /***************/
         /*** GETTERS ***/
@@ -41,6 +43,14 @@
         {
             return $this -> idEtnia;
         }
+        public function getIdPregunta ()
+        {
+            return $this -> idPregunta;
+        }
+        public function getDescripPregunta ()
+        {
+            return $this -> descripcionPregunta;
+        }
         
         /***************/
         /*** SETTERS ***/
@@ -73,6 +83,14 @@
         public function setIdEtnia ($idEtnia)
         {
             $this -> idEtnia = $idEtnia;
+        }
+        public function setIdPregunta ($idPregunta)
+        {
+            $this -> idPregunta = $idPregunta;
+        }
+        public function setDescipPregunta ($descripcionPregunta)
+        {
+            $this -> descripcionPregunta = $descripcionPregunta;
         }
     }
 

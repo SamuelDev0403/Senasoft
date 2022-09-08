@@ -8,6 +8,8 @@
         private $tematicaAbordada;
         private $idSexo;
         private $idEtnia;
+        private $idPregunta;
+        private $descripcionPregunta;
 
         public function __construct ($objDto)
         {
@@ -36,6 +38,41 @@
                 $stmt -> bindParam(6, $this -> idEtnia, PDO::PARAM_INT);
                 $stmt -> execute();
                 $estado = $stmt;
+
+            } catch (Exception $e) {
+                echo "Error en el dao";
+            }
+            return $estado;
+        }
+
+        public static function viewAllSondeo ()
+        {
+            $estado = false;
+            $sql = "CALL spSearchAllSondeo()";
+
+            try {
+                $con = new ConexionSondeo();
+                $stmt = $con -> getConexion() -> prepare($sql);
+                $stmt -> execute();
+                $estado = $stmt;
+
+            } catch (Exception $e) {
+                echo "Error en el dao";
+            }
+            return $estado;
+        }
+
+        public function addPregunta ()
+        {
+            $estado = false;
+            $sql = "CALL spAddPregunta(?)";
+
+            try {
+                $con = new ConexionSondeo();
+                $stmt = $con -> getConexion() -> prepare($sql);
+                $stmt -> bindParam(1, $this -> descripcionPregunta, PDO::PARAM_STR);
+                $stmt -> execute();
+                $estado = true;
 
             } catch (Exception $e) {
                 echo "Error en el dao";

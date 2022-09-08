@@ -19,6 +19,7 @@
         private $tipoReg;
         private $municipio;
         private $barrioVereda;
+        private $idRol;
         private $idTipoDoc;
         private $idSexo;
         private $idEtnia;
@@ -43,6 +44,7 @@
             $this -> tipoReg = $objDtoUsuarios ->  getTipoReg();
             $this -> municipio = $objDtoUsuarios -> getMunicipio();
             $this -> barrioVereda = $objDtoUsuarios -> getBarrioVereda();
+            $this -> idRol = $objDtoUsuarios -> getIdRol();
             $this -> idTipoDoc = $objDtoUsuarios -> getIdTipoDoc();
             $this -> idSexo = $objDtoUsuarios -> getIdSexo();
             $this -> idEtnia = $objDtoUsuarios -> getIdEtnia(); 
@@ -72,7 +74,7 @@
         public function addUsuario ()
         {
             $estado = false;
-            $sql = "CALL spAddCiudadano(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            $sql = "CALL spAddCiudadano(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
             try {
                 $con = new ConexionUsuarios();
@@ -92,12 +94,13 @@
                 $stmt -> bindParam(13, $this -> tipoReg, PDO::PARAM_BOOL);
                 $stmt -> bindParam(14, $this -> municipio, PDO::PARAM_STR);
                 $stmt -> bindParam(15, $this -> barrioVereda, PDO::PARAM_STR);
-                $stmt -> bindParam(16, $this -> idTipoDoc, PDO::PARAM_INT);
-                $stmt -> bindParam(17, $this -> idSexo, PDO::PARAM_INT);
-                $stmt -> bindParam(18, $this -> idEtnia, PDO::PARAM_INT);
-                $stmt -> bindParam(19, $this -> idEstrato, PDO::PARAM_INT);
-                $stmt -> bindParam(20, $this -> idNivelEdu, PDO::PARAM_INT);
-                $stmt -> bindParam(21, $this -> idDispo, PDO::PARAM_INT);
+                $stmt -> bindParam(16, $this -> idRol, PDO::PARAM_INT);
+                $stmt -> bindParam(17, $this -> idTipoDoc, PDO::PARAM_INT);
+                $stmt -> bindParam(18, $this -> idSexo, PDO::PARAM_INT);
+                $stmt -> bindParam(19, $this -> idEtnia, PDO::PARAM_INT);
+                $stmt -> bindParam(20, $this -> idEstrato, PDO::PARAM_INT);
+                $stmt -> bindParam(21, $this -> idNivelEdu, PDO::PARAM_INT);
+                $stmt -> bindParam(22, $this -> idDispo, PDO::PARAM_INT);
                 $stmt -> execute();
                 $estado = $stmt;
 

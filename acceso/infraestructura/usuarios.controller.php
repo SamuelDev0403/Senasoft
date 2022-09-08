@@ -107,6 +107,7 @@
                                 $objDto -> setTipoReg($info['regimeInput']);
                                 $objDto -> setMunicipio($info['municipalityInput']);
                                 $objDto -> setBarrioVereda($info['neighborhoodInput']);
+                                $objDto -> setIdRol($info['idRol']);
                                 $objDto -> setIdTipoDoc($info['dniType']);
                                 $objDto -> setIdSexo($info['sexInput']);
                                 $objDto -> setIdEtnia($info['ethnicityInput']);
