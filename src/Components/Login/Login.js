@@ -4,17 +4,15 @@ import { login } from '../../Services/Login';
 
 import { Link } from 'react-router-dom';
 
+import { useNavigate } from 'react-router-dom';
+
+import Swal from 'sweetalert2';
+
+import jwt_decode from 'jwt-decode'
+
 export const Login = () => {
 
-
-    const validate = (values) => {
-        const errors = {}
-
-        errors.userInput = !values.userInput ? "El campo no puede estar vacio" : ''
-        errors.passwordInput = !values.passwordInput ? "El campo no puede estar vacio" : ''
-
-        return errors
-    }
+    let navigate = useNavigate()
 
     const handlerSubmit = (values) => {
         const data = {
@@ -22,7 +20,26 @@ export const Login = () => {
             contrasena: values.passwordInput
         }
 
-        login(data)
+        const getLogin = async () => {
+            let result = await login(data)
+            if (result.status == 200) {
+                window.localStorage.setItem('token', result.token)
+                let rol = jwt_decode(result.token).rol
+
+                if (rol == 1) navigate('/home/respondersondeo')
+                if (rol == 2) navigate('/home/crearsondeo')
+
+            } else if (result.status == 404) {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Ocurrio un error con los datos ingresados',
+                    icon: 'error'
+                })
+            }
+        }
+
+        getLogin()
+
     }
 
     return (
@@ -35,7 +52,14 @@ export const Login = () => {
                             passwordInput: '',
                         }
                     }
-                    validate={(values) => validate(values)}
+                    validate={(values) => {
+                        const errors = {}
+
+                        if (!values.userInput) errors.userInput = "El campo no puede estar vacio"
+                        if (!values.passwordInput) errors.passwordInput = "El campo no puede estar vacio"
+
+                        return errors
+                    }}
                     onSubmit={(values) => handlerSubmit(values)}
                 >
 
@@ -57,7 +81,7 @@ export const Login = () => {
                                 <div className='col'>
                                     <label className='d-block mb-1'> ¿Desea registrarse como ciudadano? </label>
                                     <Link to='/register'><span className='btn btn-primary'>Registrarse</span></Link>
-                                    
+
                                 </div>
                             </div>
                         </form>

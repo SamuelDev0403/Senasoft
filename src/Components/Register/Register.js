@@ -1,41 +1,41 @@
 import './Register.css'
 import { Formik } from 'formik';
 
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { registerCitizen } from '../../Services/Register';
+
+import { useNavigate } from 'react-router-dom';
+
+import Swal from 'sweetalert2';
 
 export const Register = () => {
 
-
-    const validate = (values) => {
-        const errors = {}
-
-        errors.dniType = !values.dniType ? 'Este campo es necesario' : ''
-        errors.dniInput = !values.dniInput ? 'Este campo es necesario' : ''
-        errors.nameInput = !values.nameInput ? 'Este campo es necesario' : ''
-        errors.lastNameInput = !values.lastNameInput ? 'Este campo es necesario' : ''
-        errors.sexInput = !values.sexInput ? 'Este campo es necesario' : ''
-        errors.celInput = !values.celInput ? 'Este campo es necesario' : ''
-        errors.telInput = !values.telInput ? 'Este campo es necesario' : ''
-        errors.emailInput = !values.emailInput ? 'Este campo es necesario' : ''
-        errors.municipalityInput = !values.municipalityInput ? 'Este campo es necesario' : ''
-        errors.addressInput = !values.addressInput ? 'Este campo es necesario' : ''
-        errors.neighborhoodInput = !values.neighborhoodInput ? 'Este campo es necesario' : ''
-        errors.birthdateInput = !values.birthdateInput ? 'Este campo es necesario' : ''
-        errors.ethnicityInput = !values.ethnicityInput ? 'Este campo es necesario' : ''
-        errors.disabilityInput = !values.disabilityInput ? 'Este campo es necesario' : ''
-        errors.levelInput = !values.levelInput ? 'Este campo es necesario' : ''
-        errors.accessInput = !values.accessInput ? 'Este campo es necesario' : ''
-        errors.devicesInput = !values.devicesInput ? 'Este campo es necesario' : ''
-        errors.connectivityInput = !values.connectivityInput ? 'Este campo es necesario' : ''
-        errors.regimeInput = !values.regimeInput ? 'Este campo es necesario' : ''
-        errors.passwordInput = !values.passwordInput ? 'Este campo es necesario' : ''
-
-        return errors
-    }
+    let navigate = useNavigate()
 
     const handlerSubmit = (values) => {
-        registerCitizen()
+
+        console.log("handler")
+
+        const registerRequest = async (values) => {
+            let result = await registerCitizen(values)
+            if (result.status == 200) {
+                Swal.fire({
+                    title: 'Exito!',
+                    text: 'Se registro correctamente el usuario',
+                    icon: 'success'
+                })
+                setTimeout(()=>navigate('/home'), 3000)
+            } else if (result.status == 404) {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Ocurrio un error con los datos ingresados',
+                    icon: 'error'
+                })
+                
+            }
+        }
+
+        registerRequest(values)
     }
 
     return (
@@ -45,11 +45,11 @@ export const Register = () => {
                 <Formik
                     initialValues={
                         {
-                            dniType: 'TI',
-                            dniInput: '',
+                            dniType: '1',
+                            documento: '',
                             nameInput: '',
                             lastNameInput: '',
-                            sexInput: 'Hombre',
+                            sexInput: '1',
                             celInput: '',
                             telInput: '',
                             emailInput: '',
@@ -57,23 +57,51 @@ export const Register = () => {
                             addressInput: '',
                             neighborhoodInput: '',
                             birthdateInput: '',
-                            ethnicityInput: '',
+                            ethnicityInput: '1',
                             disabilityInput: '',
-                            stratumInput: '',
-                            levelInput: '',
-                            accessInput: 'Si',
-                            devicesInput: '',
-                            connectivityInput: 'Si',
-                            regimeInput: '',
+                            stratumInput: '1',
+                            levelInput: '1',
+                            accessInput: '1',
+                            devicesInput: '1',
+                            connectivityInput: '1',
+                            regimeInput: '1',
                             passwordInput: '',
                         }
                     }
-                    validate={(values) => validate(values)}
+                    validate={(values) => {
+                        const errors = {}
+
+                        if (!values.dniType) errors.dniType = "El campo no puede estar vacio"
+                        if (!values.documento) errors.documento = "El campo no puede estar vacio"
+                        if (!values.nameInput) errors.nameInput = "El campo no puede estar vacio"
+                        if (!values.lastNameInput) errors.lastNameInput = "El campo no puede estar vacio"
+                        if (!values.sexInput) errors.sexInput = "El campo no puede estar vacio"
+                        if (!values.celInput) errors.celInput = "El campo no puede estar vacio"
+                        if (!values.telInput) errors.telInput = "El campo no puede estar vacio"
+                        if (!values.emailInput) errors.emailInput = "El campo no puede estar vacio"
+                        if (!values.municipalityInput) errors.municipalityInput = "El campo no puede estar vacio"
+                        if (!values.addressInput) errors.addressInput = "El campo no puede estar vacio"
+                        if (!values.neighborhoodInput) errors.neighborhoodInput = "El campo no puede estar vacio"
+                        if (!values.birthdateInput) errors.birthdateInput = "El campo no puede estar vacio"
+                        if (!values.ethnicityInput) errors.ethnicityInput = "El campo no puede estar vacio"
+                        if (!values.disabilityInput) errors.disabilityInput = "El campo no puede estar vacio"
+                        if (!values.levelInput) errors.levelInput = "El campo no puede estar vacio"
+                        if (!values.accessInput) errors.accessInput = "El campo no puede estar vacio"
+                        if (!values.devicesInput) errors.devicesInput = "El campo no puede estar vacio"
+                        if (!values.connectivityInput) errors.connectivityInput = "El campo no puede estar vacio"
+                        if (!values.regimeInput) errors.regimeInput = "El campo no puede estar vacio"
+                        if (!values.passwordInput) errors.passwordInput = "El campo no puede estar vacio"
+                        if (!values.stratumInput) errors.stratumInput = 'El campo no puede estar vacio'
+
+                        // console.log("valores: ", values)
+                        console.log("errores: ", errors)
+                        return errors
+                    }}
                     onSubmit={(values) => handlerSubmit(values)}
                 >
 
                     {(formik) => (
-                        <form className='border p-3'>
+                        <form className='border p-3' onSubmit={formik.handleSubmit}>
                             <h1 className='fw-bold text-center'>Registro de ciudadano </h1>
 
                             <h3 className='fw-bold text-underline mt-2'> 1. IDENTIFICACION</h3>
@@ -81,16 +109,14 @@ export const Register = () => {
                                 <div className="col-md mt-3">
                                     <label htmlFor="userInput fw-bold"> 1.1 Tipo de documento </label>
                                     <select className='form-control' name='dniType' {...formik.getFieldProps('dniType')}>
-                                        <option value="TI"> Tarjeta de identidad </option>
-                                        <option value="CC"> Cedula de ciudadania </option>
-                                        <option value="CE"> Cedula de extranjeria </option>
+                                        <option value="1"> Cedula de ciudadania </option>
                                     </select>
                                     {formik.touched.dniType && formik.errors.dniType ? <small className='text-danger'>{formik.errors.dniType}</small> : ''}
                                 </div>
                                 <div className="col-md mt-3">
-                                    <label htmlFor="dniInput fw-bold"> 1.2 Numero de documento </label>
-                                    <input type='text' className='form-control' name='dniInput' {...formik.getFieldProps('dniInput')} />
-                                    {formik.touched.dniInput && formik.errors.dniInput ? <small className='text-danger'>{formik.errors.dniInput}</small> : ''}
+                                    <label htmlFor="documento fw-bold"> 1.2 Numero de documento </label>
+                                    <input type='text' className='form-control' name='documento' {...formik.getFieldProps('documento')} />
+                                    {formik.touched.documento && formik.errors.documento ? <small className='text-danger'>{formik.errors.documento}</small> : ''}
                                 </div>
                             </div>
                             <div className="row">
@@ -109,11 +135,11 @@ export const Register = () => {
                                 <div className="col-md-6 mt-3    ">
                                     <label htmlFor="sexInput fw-bold"> 1.5 Sexo </label>
                                     <select className='form-control' name='sexInput' {...formik.getFieldProps('sexInput')} >
-                                        <option value="Hombre"> Hombre </option>
-                                        <option value="Mujer"> Mujer </option>
-                                        <option value="Intersexual"> Intersexual </option>
-                                        <option value="Indefinido"> Indefinido </option>
-                                        <option value="PrefierenNoDecir"> Prefieren no decir </option>
+                                        <option value="1"> Hombre </option>
+                                        <option value="2"> Mujer </option>
+                                        <option value="3"> Intersexual </option>
+                                        <option value="4"> Indefinido </option>
+                                        <option value="5"> Prefieren no decir </option>
                                     </select>
                                     {formik.touched.sexInput && formik.errors.sexInput ? <small className='text-danger'>{formik.errors.sexInput}</small> : ''}
                                 </div>
@@ -123,19 +149,19 @@ export const Register = () => {
                             <div className="row">
                                 <div className="col-md mt-3">
                                     <label htmlFor="celInput fw-bold"> 2.1 Telefono celular </label>
-                                    <input type='text' className='form-control' name='celInput' {...formik.getFieldProps('celInput')} />
+                                    <input type='number' className='form-control' name='celInput' {...formik.getFieldProps('celInput')} />
                                     {formik.touched.celInput && formik.errors.celInput ? <small className='text-danger'>{formik.errors.celInput}</small> : ''}
                                 </div>
                                 <div className="col-md mt-3">
                                     <label htmlFor="telInput fw-bold"> 2.2 Telefono fijo </label>
-                                    <input type='text' className='form-control' name='telInput' {...formik.getFieldProps('telInput')} />
+                                    <input type='number' className='form-control' name='telInput' {...formik.getFieldProps('telInput')} />
                                     {formik.touched.telInput && formik.errors.telInput ? <small className='text-danger'>{formik.errors.telInput}</small> : ''}
                                 </div>
                             </div>
                             <div className="row">
                                 <div className="col-md-6 mt-3">
                                     <label htmlFor="emailInput fw-bold"> 2.3 Correo electronico * </label>
-                                    <input type='text' className='form-control' name='emailInput' {...formik.getFieldProps('emailInput')} />
+                                    <input type='email' className='form-control' name='emailInput' {...formik.getFieldProps('emailInput')} />
                                     {formik.touched.emailInput && formik.errors.emailInput ? <small className='text-danger'>{formik.errors.emailInput}</small> : ''}
                                 </div>
                             </div>
@@ -171,7 +197,13 @@ export const Register = () => {
                                 </div>
                                 <div className="col-md mt-3">
                                     <label htmlFor="ethnicityInput fw-bold"> 4.2 Etnia </label>
-                                    <input type='text' className='form-control' name='ethnicityInput' {...formik.getFieldProps('ethnicityInput')} />
+                                    <select className='form-control' name='ethnicityInput' {...formik.getFieldProps('ethnicityInput')}>
+                                        <option value="1"> Blanco </option>
+                                        {/* <option value="2"> Mestizo </option>
+                                        <option value="3"> Negro </option>
+                                        <option value="4"> Indigena </option>
+                                        <option value="5"> Otro </option> */}
+                                    </select>
                                     {formik.touched.ethnicityInput && formik.errors.ethnicityInput ? <small className='text-danger'>{formik.errors.ethnicityInput}</small> : ''}
                                 </div>
                             </div>
@@ -190,7 +222,9 @@ export const Register = () => {
                             <div className="row">
                                 <div className="col-md mt-3">
                                     <label htmlFor="stratumInput fw-bold"> 6.1 Estrato de residencia * </label>
-                                    <input type='text' className='form-control' name='stratumInput' {...formik.getFieldProps('stratumInput')} />
+                                    <select className='form-control' {...formik.getFieldProps('stratumInput')}>
+                                        <option value='1'> 1 </option>
+                                    </select>
                                     {formik.touched.stratumInput && formik.errors.stratumInput ? <small className='text-danger'>{formik.errors.stratumInput}</small> : ''}
                                 </div>
                             </div>
@@ -199,7 +233,9 @@ export const Register = () => {
                             <div className="row">
                                 <div className="col-md mt-3">
                                     <label htmlFor="levelInput fw-bold"> 7.1 Ultimo nivel educativo alcanzado * </label>
-                                    <input type='text' className='form-control' name='levelInput' {...formik.getFieldProps('levelInput')} />
+                                    <select className='form-control' {...formik.getFieldProps('levelInput')}>
+                                        <option value='1'> Tecnico </option>
+                                    </select>
                                     {formik.touched.levelInput && formik.errors.levelInput ? <small className='text-danger'>{formik.errors.levelInput}</small> : ''}
                                 </div>
                             </div>
@@ -209,17 +245,19 @@ export const Register = () => {
                                 <div className="col-md-6 mt-3">
                                     <label htmlFor="accessInput fw-bold"> 8.1 ¿Cuenta con acceso a dispositivos tecnologicos? * </label>
                                     <select className='form-control' {...formik.getFieldProps('accessInput')}>
-                                        <option value='Si'> Si </option>
-                                        <option value='No'> No </option>
+                                        <option value='1'> Si </option>
+                                        <option value='0'> No </option>
                                     </select>
                                     {formik.touched.accessInput && formik.errors.accessInput ? <small className='text-danger'>{formik.errors.accessInput}</small> : ''}
                                 </div>
-                                {formik.values.accessInput === 'Si' ?
+                                {formik.values.accessInput === '1' ?
                                     <div className="col-md mt-3">
                                         <label htmlFor="devicesInput fw-bold"> 8.2 Si, la respuesta 8.1 fue afirmativa ¿cuál o cuáles? * </label>
                                         <select className='form-control' {...formik.getFieldProps('devicesInput')}>
-                                            <option value='Si'> Si </option>
-                                            <option value='No'> No </option>
+                                            <option value='1'> Computador </option>
+                                            {/* <option value='2'> Telefono movil </option>
+                                            <option value='3'> Tablet </option>
+                                            <option value='4'> Otro </option> */}
                                         </select>
                                         {formik.touched.devicesInput && formik.errors.devicesInput ? <small className='text-danger'>{formik.errors.devicesInput}</small> : ''}
                                     </div> : ''}
@@ -228,8 +266,8 @@ export const Register = () => {
                                 <div className="col-md-6 mt-3">
                                     <label htmlFor="con fw-bold"> 8.3 ¿Cuenta con conectividad a internet? * </label>
                                     <select className='form-control' name='connectivityInput' {...formik.getFieldProps('connectivityInput')}>
-                                        <option value='Si'> Si </option>
-                                        <option value='No'> No </option>
+                                        <option value='1'> Si </option>
+                                        <option value='0'> No </option>
                                     </select>
                                     {formik.touched.connectivityInput && formik.errors.connectivityInput ? <small className='text-danger'>{formik.errors.connectivityInput}</small> : ''}
                                 </div>
@@ -238,10 +276,10 @@ export const Register = () => {
                             <h3 className='fw-bold text-underline mt-3'> 9. SALUD </h3>
                             <div className="row">
                                 <div className="col-md-6 mt-3">
-                                    <label htmlFor="regimeInput fw-bold"> 9.1 Ultimo nivel educativo alcanzado * </label>
+                                    <label htmlFor="regimeInput fw-bold"> 9.1 Regimen de salud * </label>
                                     <select className='form-control' name='regimeInput' {...formik.getFieldProps('regimeInput')} >
-                                        <option value="Benificiario"> Beneficiario </option>
-                                        <option value="Contributivo"> Contributivo </option>
+                                        <option value="1"> Subsidiado </option>
+                                        <option value="0"> Contributivo </option>
                                     </select>
                                     {formik.touched.regimeInput && formik.errors.regimeInput ? <small className='text-danger'>{formik.errors.regimeInput}</small> : ''}
                                 </div>
@@ -257,7 +295,7 @@ export const Register = () => {
                             </div>
 
                             <div className='d-flex justify-content-between'>
-                                <button type='submit' onClick={(e) => e.preventDefault()} className='btn btn-primary mt-3'>Registrarse</button>
+                                <button type='submit' className='btn btn-primary mt-3'>Registrarse</button>
                                 <Link to='/login'> <button type='button' className='btn btn-primary mt-3'>Volver al login</button> </Link>
                             </div>
                         </form>

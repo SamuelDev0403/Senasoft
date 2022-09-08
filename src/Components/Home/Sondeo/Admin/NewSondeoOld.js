@@ -3,30 +3,38 @@ import { Formik } from 'formik'
 import { useState } from 'react'
 
 export const NewSondeo = () => {
-
-
-    const [questions, setQuestions] = useState([])
     const [questionsNumber, setQuestionsNumber] = useState([])
+    const [answers, setAnswers] = useState([])
 
-    const handlerSubmit = (values) =>{
-        
+    const handlerSubmit = (values) => {
+
     }
 
-    const handleQuestion = () =>{
+    const handleQuestion = () => {
         // setQuestions({...questions, question: ''})
-        setQuestionsNumber()
+        setQuestionsNumber(questionsNumber.concat({
+            question: '',
+            answers: []
+        }))
         console.log("questionsNumber: ", questionsNumber)
     }
 
+    const handleAnswer = (index, index2) => {
+        setAnswers(answers.concat({question: index, answer: ''}))
 
-    const validate = (values) =>{
+        console.log("Answers: ", answers)
+    }
+
+
+    const validate = (values) => {
 
         const errors = {}
 
-        errors.nameInput = !values.nameInput ? 'Este campo es necesario' : ''
-        errors.openDateInput = !values.openDateInput ? 'Este campo es necesario' : ''
-        errors.closeDateInput = !values.closeDateInput ? 'Este campo es necesario' : ''
-        errors.sexInput = !values.sexInput ? 'Este campo es necesario' : ''
+        if (!values.nameInput) errors.nameInput = 'Este campo es necesario'
+        if (!values.openDateInput) errors.openDateInput = 'Este campo es necesario'
+        if (!values.descriptionInput) errors.descriptionInput = 'Este campo es necesario'
+        if (!values.closeDateInput) errors.closeDateInput = 'Este campo es necesario'
+        
 
         return errors
     }
@@ -38,12 +46,13 @@ export const NewSondeo = () => {
                 initialValues={
                     {
                         nameInput: '',
+                        descriptionInput: '',
                         openDateInput: '',
                         closeDateInput: '',
                         sexInput: 'Hombre',
                         ageMajorInput: '',
                         ageMinorInput: '',
-  
+
                     }
                 }
                 validate={(values) => validate(values)}
@@ -57,17 +66,24 @@ export const NewSondeo = () => {
                             <h2> DATOS BASICOS </h2>
                             <div className="col">
                                 <label> Nombre del sondeo </label>
-                                <input type="text" name="nameInput" className="form-control" {...formik.getFieldProps('nameInput')}/>
+                                <input type="text" name="nameInput" className="form-control" {...formik.getFieldProps('nameInput')} />
                                 {formik.touched.nameInput && formik.errors.nameInput ? <small className='text-danger'>{formik.errors.nameInput}</small> : ''}
                             </div>
                             <div className="col">
+                                <label> Tematica del sondeo </label>
+                                <input type="text" name="descriptionInput" className="form-control" {...formik.getFieldProps('descriptionInput')} />
+                                {formik.touched.descriptionInput && formik.errors.descriptionInput ? <small className='text-danger'>{formik.errors.descriptionInput}</small> : ''}
+                            </div>
+                        </div>
+                        <div className="row mt-3">
+                            <div className="col">
                                 <label> Fecha de inicio </label>
-                                <input type="date" name="openDateInput" className="form-control" {...formik.getFieldProps('openDateInput')}/>
+                                <input type="date" name="openDateInput" className="form-control" {...formik.getFieldProps('openDateInput')} />
                                 {formik.touched.openDateInput && formik.errors.openDateInput ? <small className='text-danger'>{formik.errors.openDateInput}</small> : ''}
                             </div>
                             <div className="col">
                                 <label> Fecha de cierre </label>
-                                <input type="date" name="closeDateInput" className="form-control" {...formik.getFieldProps('closeDateInput')}/>
+                                <input type="date" name="closeDateInput" className="form-control" {...formik.getFieldProps('closeDateInput')} />
                                 {formik.touched.closeDateInput && formik.errors.closeDateInput ? <small className='text-danger'>{formik.errors.closeDateInput}</small> : ''}
                             </div>
                         </div>
@@ -83,18 +99,23 @@ export const NewSondeo = () => {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {questionsNumber.map((e, index)=>(
-                                            <tr>
-                                                <td> <input type='text' name={'questionInput'+index}/> </td>
+                                        {questionsNumber.map((e, index) => (
+                                            <tr key={index}>
+                                                <td> <input type='text' className='form-control' name={'questionInput' + index} /> </td>
+                                                <td>
+                                                    {questionsNumber[index].answers.map((e, index) => (
+                                                        <input type='text' value='' className='form-control'></input>
+                                                    ))}
+                                                    <button type="button" className="btn btn-primary" onClick={()=>handleAnswer(index)}> Agregar nueva respuesta</button>
+                                                </td>
                                             </tr>
                                         ))}
                                         <tr>
                                             <td> Contenido de preguntas </td>
-                                            <td> Contenido de respuestas </td>
+                                            <td></td>
                                         </tr>
                                         <tr>
-                                            <td> <button type="button" className="btn btn-primary" onClick={()=>handleQuestion()}> Agregar nueva pregunta</button> </td>
-                                            <td> <button type="button" className="btn btn-primary"> Agregar nueva respuesta</button> </td>
+                                            <td> <button type="button" className="btn btn-primary" onClick={() => handleQuestion()}> Agregar nueva pregunta</button> </td>
                                         </tr>
                                     </tbody>
                                 </table>
